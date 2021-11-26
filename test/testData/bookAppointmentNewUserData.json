@@ -1,0 +1,27 @@
+{
+    "userLocationSearchKeyword":"florida",
+    "userLocationToSelect":"Florida Mall Avenue Orlando, FL, USA",
+    "userEmail":"ajinkya14@nomail.com",
+    "userPassword" : "Test@123",
+    "providerToBeBookedName":"Karen Allen",
+    "appointmentTimeSlot" : "9:30 pm",
+    "counsellingType" :"Individual Counseling",
+    "appointmentType" : "In Person",
+    "appointmentFor":"aa aa",
+    "patientFirstName" :"qaa",
+    "patientLastName" : "qaa",
+    "patientEmail" : "ajinkyaw@nomail.com",
+    "patientGender" : "Male",
+    "patientDOB" : "02021998",
+    "replationshipWithPatient":"Self",
+    "patientPhoneNumber":"5512378693",
+    "billingInfoFirstName" : "ajinkya",
+    "billingInfoLastName" : "phand",
+    "billingInfoAddressLine1" : "Caesars Palace",
+    "billingInfoAddressToSelect" : "Caesars Palace Drive Las Vegas, NV, USA",
+    "billingInfoCardNumber" : "4242424242424242",
+    "billingInfoCardExpiry" : "0824",
+    "billingInfoCardCVC" : "123",
+    "bookingConfirmationPopupText" : "You're all booked and your account has been created"
+    
+}

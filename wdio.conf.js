@@ -20,9 +20,16 @@ exports.config = {
     // then the current working directory is where your `package.json` resides, so `wdio`
     // will be called from there.
     //
+    suites:{
+        googleSearch:["./test/specs/google-search/*.js"],
+        thriveworksTests :["./test/specs/thriveworks/login.js"],
+        sanityTests : ["./test/specs/thriveworks/sanity/*.js"]
+    },
     specs: [
         // './test/specs/**/*.js'
-        './test/specs/eCommerce.js'
+        // './test/specs/eCommerce.js',
+        './test/specs/firstTest.js',
+        // './test/specs/google-search/*.js'
     ],
     // Patterns to exclude.
     exclude: [
@@ -72,6 +79,8 @@ exports.config = {
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
     logLevel: 'silent',
+
+    
     //
     // Set specific log levels per logger
     // loggers:
@@ -95,7 +104,7 @@ exports.config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    baseUrl: 'http://localhost',
+    baseUrl: '',
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
@@ -135,7 +144,10 @@ exports.config = {
     // see also: https://webdriver.io/docs/dot-reporter
     reporters: ['spec'],
 
-
+    reporters: [['allure', {
+        outputDir: 'allure-results',
+        disableWebdriverScreenshotsReporting: false,
+    }]],
     
     //
     // Options to be passed to Mocha.
