@@ -1,0 +1,17 @@
+{
+    "locationSearchKeyword":"florida",
+    "locationToSelect":"Florida Mall Avenue Orlando, FL, USA",
+    "userEmail":"ajinkya.phand@velotio.com",
+    "userPassword" : "Oscar@123",
+    "providerToBeBookedName":"Karen Allen",
+    "patientCounsellingType" :"Individual Counseling",
+    "patientAppointmentMode" : "In Person",
+    "appointmentFor" : "Ajinkya Phand",
+    "patientFirstName" : "Ajinkya",
+    "patientLastName" : "Phand",
+    "patientEmail" : "ajinkya.phand@velotio.com",
+    "patientGender" : "Male",
+    "patientDOB" : "02/02/1998",
+    "relationshipWithPatient" : "Self",
+    "bookingConfirmationPopupText" : "Your appointment is booked, and your account was created"
+}

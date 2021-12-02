@@ -1,5 +1,5 @@
 const chaiExpect = require('chai').expect
-const loginPageObject = require('../pageObjects/loginPage')
+const loginPageObject = require('../../pageObjects/login/loginPage')
 
 describe('E-Commerce Test Suite', () => {
     it('Complete end-to-end test case', () => {

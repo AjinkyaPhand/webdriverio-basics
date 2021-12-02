@@ -1,6 +1,7 @@
 const fs = require('fs');
+const CommonBrowserUtils = require('../../utils/commonUtils')
 
-class BookNewAppointmentPage {
+class BookNewAppointmentPage extends CommonBrowserUtils {
 
     userTestData = JSON.parse(fs.readFileSync('test/testData/bookAppointmentNewUserData.json'))
 
@@ -8,7 +9,7 @@ class BookNewAppointmentPage {
     get locationModalInputField() { return $("#modal-location") }
     get locationModalInputSuggestions() { return $$("ul[class*='AddressAutocomplete_suggestion__pqIPx'] li") }
     get locationModalViewProvidersBtn() { return $("//button[text()='View Providers']") }
-    get allSelectableProvidersTimeSlots() { return $$("//div[contains(@class,'selectable-item')]") }
+    get allSelectableProvidersTimeSlots() { return "//div[contains(@class,'selectable-item')]" }
     get signUpLink() { return $("=Sign up") }
     get signUpEmailInputField() { return $("#email") }
     get signUpEmailPasswordField() { return $("#password") }
@@ -62,24 +63,108 @@ class BookNewAppointmentPage {
     get bookingConfirmPopupGoToDashbrdBtn() { return $("button=Go to Dashboard") }
     get userDashboardAllApointmentCards() { return $$("//div[contains(@class,'Appointment_appt_margin_xl__g4R3m')][1]") }
 
-    async waitForProvidersToLoad() {
-        await driver.waitUntil(async () => {
-            const foundTimeSlotElems = await this.allSelectableProvidersTimeSlots
-            return foundTimeSlotElems.length > 0 ? foundTimeSlotElems : false
+    async selectInitialLocatioFromPopup() {
+        await this.locationModalInputField.setValue(this.userTestData.userLocationSearchKeyword)
+        const autoSuggestedLocationDropdownItems = await driver.waitUntil(async () => {
+            const allLocations = await this.locationModalInputSuggestions
+            return allLocations.length > 0 ? allLocations : false
         }, {
-            timeout: 20000,
-            timeoutMsg: 'No Providers were found after entering location'
+            timeoutMsg: 'No Locations were found'
         })
+        for (let eachLocation of autoSuggestedLocationDropdownItems) {
+            if (await eachLocation.getText() === this.userTestData.userLocationToSelect) {
+                await eachLocation.click()
+                break
+            }
+        }
+        await super.waitForElemToBeClickableAndClick(this.locationModalViewProvidersBtn)
+    }
+
+    async waitForProvidersToLoad() {
+        await super.waitForElemsToLoad(this.allSelectableProvidersTimeSlots, "No Providers were found after entering location")
+    }
+
+    async signUpNewUser(userEmail,userPassword){
+        await super.waitForElemToBeClickableAndClick(this.signUpLink)
+        await super.enterValue(userEmail)
+        await super.enterValue(userPassword)
+        await super.waitForElemToBeClickableAndClick(this.signUpButton)
+    }
+
+    async setPaginationValue(){
+        await this.paginationDropdownButton.click()
+        await this.paginationSelectValue.click()
+        await this.waitForProvidersToLoad()
     }
 
     async waitForAppointmentsToLoad() {
-        await driver.waitUntil(async () => {
-            const allAppointments = await this.userDashboardAllApointmentCards
-            return allAppointments.length > 0 ? allAppointments : false
-        }, {
-            timeout: 20000,
-            timeoutMsg: 'No appointments were found'
-        })
+        await super.waitForElemsToLoad(this.userDashboardAllApointmentCards, "No appointments were found", 30000)
+    }
+
+    async getProviderAndSelectTimeSlot(){
+        // ----Select Provider----
+        let matchedProviderCard = null
+        for (let eachProviderCard of await this.allVisibleProvidersCards) {
+            const tempProviderString = await eachProviderCard.$(this.singleProviderCardFromAllCards).getText()
+            if (tempProviderString.includes(this.userTestData.providerToBeBookedName)) {
+                matchedProviderCard = eachProviderCard
+                break
+            }
+        }
+
+        // Get (only those which can be selected) next day slots 
+        await matchedProviderCard.scrollIntoView()
+        for (let eachTimeSlot of await matchedProviderCard.$$(this.nextDayAvailableSlotsForProvider)) {
+            if (await eachTimeSlot.getText() === this.userTestData.appointmentTimeSlot) {
+                await eachTimeSlot.click()
+                break
+            }
+        }
+        await matchedProviderCard.$(this.bookAppointmentBtnForProvider).scrollIntoView()
+        await super.waitForElemToBeClickableAndClick(this.bookAppointmentBtnForProvider)
+    }
+
+    async verifySelectedProvidersAppointmentDetails(providerName,providerTimeSlot){
+        await this.providerPreviewCard.waitForDisplayed()
+        await expect(this.providerPreviewCard).toHaveTextContaining(providerName)
+        await expect(this.providerPreviewCard).toHaveTextContaining(providerTimeSlot)
+    }
+
+    async getPatientConsentAndConfirmation(){
+        // ---Select How we may help option----
+        await super.scrollToElemAndClick(this.howWeMayHelpDropdownButton)
+        await this.howWeMayHelpDropdownMenuItem.click()
+
+        // ----Select Appointment Type option---
+        await this.appointmentTypeDropdown.click()
+        await this.appointmentTypeDropdownMenuItem.click()
+
+
+        // ------DELETE THIS PART------
+        // await $("button=Add new Patient").click()
+        // await bookNewAppointmentPageObject.appointmentForDropdownButton.click()
+        // await bookNewAppointmentPageObject.appointmentForDropdownMenuitem.click()
+        // ----------------
+
+        // ========Patient Information=========
+        await this.patientFirstNameField.scrollIntoView()
+        await super.enterValue(this.patientFirstNameField,userTestData.patientFirstName)
+        await super.enterValue(this.patientLastNameField,userTestData.patientLastName)
+        await super.enterValue(this.patientEmailField,userTestData.patientEmail)
+        await this.patientGenderDropdownButton.click()
+        await this.patientGenderDropdownMenuItem.click()
+        await super.enterValue(this.patientDOBField,userTestData.patientDOB)
+        await this.patientRelationshipDropdownButton.click()
+        await this.patientRelationshipDropdownMenuItem.click()
+        await super.enterValue(this.patientPhoneNumber,userTestData.patientPhoneNumber)
+
+
+        // ========Client Aggrement=========
+        await super.scrollToElemAndClick(this.clientAggrementCheckBox)
+        await this.acknowledgementText.waitForDisplayed()
+        await this.acknowledgementText.scrollIntoView()
+        await super.waitForElemToBeClickableAndClick(this.ackIAgreeButton)
+        await super.waitForElemToBeClickableAndClick(this.continueButton)
     }
 
 }

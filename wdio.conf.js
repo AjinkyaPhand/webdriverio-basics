@@ -22,8 +22,9 @@ exports.config = {
     //
     suites:{
         googleSearch:["./test/specs/google-search/*.js"],
-        thriveworksTests :["./test/specs/thriveworks/login.js"],
-        sanityTests : ["./test/specs/thriveworks/sanity/*.js"]
+        thriveworksTests :["./test/specs/other/login.js"],
+        sanityTests : ["./test/specs/thriveworks/sanity/*.js"],
+        localTestExecutionSuite : ["./test/specs/thriveworks/sanity/bookAppointmentForExistingUser.js"]
     },
     specs: [
         // './test/specs/**/*.js'
