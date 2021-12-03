@@ -1,4 +1,4 @@
-const googlePageObject = require('../../pageObjects/googlePage')
+const googlePageObject = require('../../pageObjects/other/googlePage')
 
 describe("First Test Suite",()=>{
 

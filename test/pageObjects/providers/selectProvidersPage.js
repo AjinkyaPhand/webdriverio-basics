@@ -1,4 +1,6 @@
 const CommonBrowserUtils = require('../../utils/commonUtils')
+const expectChai = require('chai').expect
+
 
 class selectProvidersPage extends CommonBrowserUtils {
 
@@ -16,6 +18,12 @@ class selectProvidersPage extends CommonBrowserUtils {
     get filterDateToBeSelected() { return "//div[contains(@aria-label,'placeholder')]" }
     get filterSelectDateBtn() { return $("//button[text()='Select Date']") } 
     get fisrtDisplayedDateHeader() { return $("//div[contains(@class,'ProvidersAndMap_results_container__1CYkM')]/following-sibling::div//button[contains(@class,'DatePaginator_date_paginator_button')][1]/following-sibling::div[1]/div[1]") }
+    get filterAppointmentTypeDrpdwnBtn() { return $("//span[contains(@class,'FilterDropdownWrapper_pill_label') and contains(text(),'Appointment Type')]")}
+    get filterSelectAppointmentTypeOption() { return "//div[contains(@class,'AppointmentModeFilter_container__2w5mB')]//span[contains(text(),'placeholder')]" } 
+    get lastPageValueFromPagination() { return $("//button[contains(text(),'Next') and @type='button']/parent::div/div/button[last()]") }
+    get nextPageBtn() { return $("//button[text()='Next']") }
+    get providerNameFromProviderCard() { return "./div/div[1]/div/div/div[2]/div[1]/a"}
+    get providerAvaliableAppointmentTypeFromCard() { return "./div/div[1]/div/div/div[2]/div[1]/div/div" }
 
 
     async verifyUserLoginSuccess(){
@@ -24,6 +32,7 @@ class selectProvidersPage extends CommonBrowserUtils {
 
     async waitForProvidersToLoad(){
         await super.waitForElemsToLoad(this.allProvidersSelectableTimeSlots, "No Providers were found")
+        await driver.pause(2500)
     }
 
     async setPaginationValue(){
@@ -74,8 +83,49 @@ class selectProvidersPage extends CommonBrowserUtils {
         await this.clickOnClearFilterBtn()
         await this.waitForProvidersToLoad()
         await this.verifyFirstDateHeaderDisplayed(afterClearFilterDateHeaderDay,afterClearFilterDateHeaderDate)
-        
+    }
 
+    async applyAppointmentFilter(appointmentType){
+        await this.filterAppointmentTypeDrpdwnBtn.click()
+        await driver.$(this.filterSelectAppointmentTypeOption.replace('placeholder',appointmentType)).click()
+    }
+
+    async getTotalPagesValue(){
+        return parseInt(await this.lastPageValueFromPagination.getText())
+    }
+
+    async iterateOverProvidersCardAndVerifyDetails(detailType,detailValue){
+        await this.waitForProvidersToLoad()
+        const totalPages = await this.getTotalPagesValue()
+        if(detailType == "providerName"){
+
+        }
+        else if(detailType=="providerAvaliableApptmtTypes"){
+            for(let i=1;i<=totalPages;i++){
+                await this.allVisibleProvidersCards[0].scrollIntoView({block: "center"})
+                var allProvidersCard = await this.allVisibleProvidersCards;
+                for(let i = 0; i<allProvidersCard.length; i++){
+                    if(!(await allProvidersCard[i].$(this.providerAvaliableAppointmentTypeFromCard).getText()).includes(detailValue)){
+                        return false
+                    }
+                }
+                if(i==totalPages){
+                    return true
+                }
+                await driver.pause(300)
+                await super.scrollToElemAndClick(this.nextPageBtn)
+                await this.waitForProvidersToLoad()
+            }
+        }
+        else{
+
+        }
+    }
+
+    async verifyAppointmentTypeFilterWorks(appointmentTypeToSelect){
+        await this.applyAppointmentFilter(appointmentTypeToSelect)    
+        expectChai(await this.iterateOverProvidersCardAndVerifyDetails("providerAvaliableApptmtTypes",appointmentTypeToSelect)).to.be.true;
+        await this.clickOnClearFilterBtn()
     }
 
 }

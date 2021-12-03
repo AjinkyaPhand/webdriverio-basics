@@ -14,7 +14,7 @@ class CommonBrowserUtils {
      * @param {element} element - Element locator to be scrolled to and clicked
      */
     async scrollToElemAndClick(element){
-        await element.scrollIntoView()
+        await element.scrollIntoView({block: "center"})
         await element.click()
     }
 

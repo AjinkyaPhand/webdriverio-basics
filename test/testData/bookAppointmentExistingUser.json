@@ -13,5 +13,6 @@
     "patientGender" : "Male",
     "patientDOB" : "02/02/1998",
     "relationshipWithPatient" : "Self",
-    "bookingConfirmationPopupText" : "Your appointment is booked, and your account was created"
+    "bookingConfirmationPopupText" : "Your appointment is booked, and your account was created",
+    "appointmentTypeFilterOption" : "Video visit"
 }

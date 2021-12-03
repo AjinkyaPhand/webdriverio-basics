@@ -9,14 +9,14 @@
     "executeThriveworksTests": "npx wdio run wdio.conf.js --suite thriveworksTests",
     "generateHTMLReport": "allure generate allure-results --clean && allure open",
     "executeSanityTests": "npx wdio run wdio.conf.js --suite sanityTests",
-    "executeTestInLocal":"npx wdio run wdio.conf.js --suite localTestExecutionSuite"
-
+    "executeTestInLocal": "npx wdio run wdio.conf.js --suite localTestExecutionSuite"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@wdio/allure-reporter": "^7.16.8",
+    "@wdio/browserstack-service": "^7.16.10",
     "@wdio/cli": "^7.16.8",
     "@wdio/local-runner": "^7.16.8",
     "@wdio/mocha-framework": "^7.16.6",

@@ -34,14 +34,17 @@ describe('Existing user test suite',()=>{
         await userDashboardAppointmentsPageObj.bookedProviderDetails(userData.providerToBeBookedName,bookingTimeSlotFormat)
     })
 
-    xit("Check if Date filter works after booking an appointment for existing user",async ()=>{
+    it("Check if Date filter works after booking an appointment for existing user",async ()=>{
         await appLandingPageObj.selectInitialLocationFromPopup(userData.locationSearchKeyword,userData.locationToSelect)
         await selectProvidersPageObj.verifyDateFilterWorking('Choose '+moment().add(1, 'days').format('dddd, MMMM Do, YYYY'),moment().add(1, 'days').format('ddd'),moment().add(1, 'days').format('MMM DD'),moment().format('ddd'),moment().format('MMM DD'))
-        await driver.pause(5000)
+        await driver.pause(3000)
     })
 
-    it("Check if 'Appointment type' filter works after booking an appointment for existing user", async ()=>{
-        
+    xit("Check if 'Appointment type' filter works after booking an appointment for existing user", async ()=>{
+        await appLandingPageObj.selectInitialLocationFromPopup(userData.locationSearchKeyword,userData.locationToSelect)
+        await selectProvidersPageObj.verifyAppointmentTypeFilterWorks(userData.appointmentTypeFilterOption)
+        await selectProvidersPageObj.waitForProvidersToLoad()
+        await driver.pause(3000)
     })
 
 })

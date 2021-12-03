@@ -20,17 +20,30 @@ exports.config = {
     // then the current working directory is where your `package.json` resides, so `wdio`
     // will be called from there.
     //
-    suites:{
-        googleSearch:["./test/specs/google-search/*.js"],
-        thriveworksTests :["./test/specs/other/login.js"],
-        sanityTests : ["./test/specs/thriveworks/sanity/*.js"],
-        localTestExecutionSuite : ["./test/specs/thriveworks/sanity/bookAppointmentForExistingUser.js"]
+
+    // -----BROWSERSTACK CONFIGs--------
+    user: 'ajinkyaphand_G6vt7n',
+    key: 'FpLsBidDLxUysXDsmT7R',
+    // commonCapabilities: {
+    //     name: 'parallel_test',
+    //     build: 'browserstack-build-1'
+    // },
+    // capabilities: [{
+    //     'browser': 'firefox',
+    //     'browser_version': 'latest',
+    //     'os': 'Windows',
+    //     'os_version': '10'
+    // }],
+    // services: ['browserstack'],
+
+    suites: {
+        googleSearch: ["./test/specs/google-search/*.js"],
+        thriveworksTests: ["./test/specs/other/login.js"],
+        sanityTests: ["./test/specs/thriveworks/sanity/*.js"],
+        localTestExecutionSuite: ["./test/specs/thriveworks/sanity/bookAppointmentForExistingUser.js"]
     },
     specs: [
         // './test/specs/**/*.js'
-        // './test/specs/eCommerce.js',
-        './test/specs/firstTest.js',
-        // './test/specs/google-search/*.js'
     ],
     // Patterns to exclude.
     exclude: [
@@ -58,8 +71,9 @@ exports.config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
+
     capabilities: [{
-    
+
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
@@ -81,7 +95,7 @@ exports.config = {
     // Level of logging verbosity: trace | debug | info | warn | error | silent
     logLevel: 'silent',
 
-    
+
     //
     // Set specific log levels per logger
     // loggers:
@@ -108,7 +122,7 @@ exports.config = {
     baseUrl: '',
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 10000,
+    waitforTimeout: 30000,
     //
     // Default timeout in milliseconds for request
     // if browser driver or grid doesn't send response
@@ -122,7 +136,7 @@ exports.config = {
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
     services: ['chromedriver'],
-    
+
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
     // see also: https://webdriver.io/docs/frameworks
@@ -149,7 +163,7 @@ exports.config = {
         outputDir: 'allure-results',
         disableWebdriverScreenshotsReporting: false,
     }]],
-    
+
     //
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
@@ -243,6 +257,11 @@ exports.config = {
      * @param {Object}  result.retries   informations to spec related retries, e.g. `{ attempts: 0, limit: 0 }`
      */
     // afterTest: function(test, context, { error, result, duration, passed, retries }) {
+    //     if(passed) {
+    //         browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed","reason": "Assertions passed"}}');
+    //   } else {
+    //         browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed","reason": "At least 1 assertion failed"}}');
+    //   }
     // },
 
 
